@@ -371,14 +371,6 @@ class StaticGraphsPage(tk.Frame):
         self.canvas = FigureCanvasTkAgg(f_static, self)
         plot() # just calling the above function to have an already plotting graph when openning page
 
-
-        
-
-
-
-
-
-
         self.toolbar = NavigationToolbar2Tk(self.canvas, self)
         color = "#FFFFFF"
         self.toolbar.config(background=color)
@@ -556,17 +548,17 @@ def goToPrices(*args):
     Trading_app.show_frame(app,Pricesdownloader)
 
 
-app = Trading_app()
 
-app.iconbitmap(r'C:\Users\alexa\OneDrive\Desktop\SN Dimensions\trade.ico')
-app.geometry("1400x700")
-ani = animation.FuncAnimation(f_real_time, animate, interval=13000) #milli ==> 1 sec
-
-update_job = app.after(13000, live_update)
-app.bind('<F1>', ShutProgram)
-app.bind('<F2>', goToRealTime)
-app.bind('<F3>', goToStaticGraphs)
-app.bind('<F4>', goToPrices)
-app.mainloop()
+if __name__ == "__main__":
+    app = Trading_app()
+    app.iconbitmap(r'C:\Users\alexa\OneDrive\Desktop\SN Dimensions\trade.ico')
+    app.geometry("1400x700")
+    ani = animation.FuncAnimation(f_real_time, animate, interval=13000) #milli ==> 1 sec
+    update_job = app.after(13000, live_update)
+    app.bind('<F1>', ShutProgram)
+    app.bind('<F2>', goToRealTime)
+    app.bind('<F3>', goToStaticGraphs)
+    app.bind('<F4>', goToPrices)
+    app.mainloop()
 
 
