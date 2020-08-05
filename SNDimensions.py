@@ -1,5 +1,5 @@
 import os
-os.chdir(f'{os.path.dirname(__file__)}\\SN Dimensions')
+os.chdir(f'{os.path.dirname(__file__)}') 
 import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
@@ -39,14 +39,15 @@ SMALL_FONT= ("Arial", 9)
 darkColor = '#406441'
 lightColor = '#03F36F'
 indexColor='#AD21C3'
-photo = PhotoImage(file = f'{os.path.dirname(__file__)}\\finance1.gif')
 
 f_real_time = plt.figure(1)
 chartLoad = True
 
-stock = "PLUG"
-intra_ticker = "plug"
+stock = "MSFT"
+intra_ticker = "msft"
 index="^GSPC"
+
+
 
 def changeChartLoad(toWhat):
     global chartLoad
@@ -119,6 +120,7 @@ class Trading_app(tk.Toplevel):
 class StartPage(tk.Frame):
     def __init__(self, parent, controller,bg="white"):
         tk.Frame.__init__(self, parent)
+        photo = PhotoImage(file = f'{os.path.dirname(__file__)}\\finance1.gif')
         label = ttk.Label(self, text=("Alpha version of SN Dimensions, use at yor own risk."),
          font=LARGE_FONT)
         label.pack(pady=10,padx=10)
@@ -147,7 +149,7 @@ def save(live_update_list):
 def live_update(*args):
     global live_update_list
     global update_job
-    df = yf.download("plug", period = "1d", interval = "1m").tail(1)
+    df = yf.download("msft", period = "1d", interval = "1m").tail(1)
     df= df.reset_index()
     df['Datetime'] = df['Datetime'].astype('datetime64[ns]') 
     df['Datetime'] = df['Datetime'].dt.tz_localize(None)
@@ -237,6 +239,7 @@ class Real_Time_data(tk.Frame):
                             )
         b_refresh.pack(side="left",padx=5, pady=5,fill=tk.Y)
 
+
         # Run/Stop of the client
         RUN = ['Running', 'Stopped']    
         v_start_stop = tk.StringVar(self)
@@ -280,6 +283,8 @@ class StaticGraphsPage(tk.Frame):
             self.ax4.clear()
 
             static_p_entry_stock = str(self.static_stock.get())
+            if "^" in static_p_entry_stock:
+                static_p_entry_stock = static_p_entry_stock.replace("^", "")
             static_p_period = str(self.time_period.get())
 
             df = db.read_db(static_p_entry_stock,static_p_period)
@@ -327,6 +332,7 @@ class StaticGraphsPage(tk.Frame):
         con.close()
         global av_stocks_list
         av_stocks_list = []
+
         for i in range(len(available_table)):
             test = available_table[i][0]
             av_stocks_list.append(test)
@@ -338,9 +344,9 @@ class StaticGraphsPage(tk.Frame):
 
         rectangle2 = tk.Label(box1, text="Select stock:")      
         self.static_stock = tk.StringVar(self)
-        self.static_stock.set(av_stocks_list[0]) 
-        b2 = tk.OptionMenu(box1, self.static_stock, *av_stocks_list)
+        self.static_stock.set(av_stocks_list[0])
         
+        b2 = tk.OptionMenu(box1, self.static_stock, *av_stocks_list)
         timeFrame = ["1 Week","60 Days", "5 Years" ]
         self.time_period = tk.StringVar(self)
         self.time_period.set(timeFrame[2])                             
@@ -350,7 +356,6 @@ class StaticGraphsPage(tk.Frame):
         ))
         
         #                                           ***LAYOUT***
-
         b1.pack(side="left", padx=5, pady=5,fill=tk.Y)
         rectangle.pack(side="left",padx=5, pady=5,fill=tk.Y)                         # just some filling    
         rectangle2.pack(side="left",padx=5, pady=5,fill=tk.Y)             
@@ -398,7 +403,7 @@ class Pricesdownloader(tk.Frame):
         self.prompt = ttk.Label(self.boxL2)
         self.prompt.pack()
 
-        #                                           -- Widgets -- L1
+        #                                  -- Widgets -- L1
         # Labels
         label = ttk.Label(boxL1, text="Prices downloader", font=LARGE_FONT)
         type_stock_symbol = ttk.Label(boxL1, text="Stock symbol:", font=NORM_FONT)
@@ -489,7 +494,7 @@ class Pricesdownloader(tk.Frame):
         TableMargin.pack(side="bottom")
         scrollbarx = Scrollbar(TableMargin, orient=HORIZONTAL)
         scrollbary = Scrollbar(TableMargin, orient=VERTICAL)
-        tree = (ttk.Treeview(TableMargin, columns=("Date", "Open", "High", "Low", "Close", "Adj Close", "Volume"), 
+        tree = (ttk.Treeview(TableMargin, columns=("Datetime", "Open", "High", "Low", "Close", "Adj Close", "Volume"), 
                 height=400, selectmode="extended", 
                 yscrollcommand=scrollbary.set, xscrollcommand=scrollbarx.set)
                 )
@@ -497,7 +502,7 @@ class Pricesdownloader(tk.Frame):
         scrollbary.pack(side=RIGHT, fill=Y)
         scrollbarx.config(command=tree.xview)
         scrollbarx.pack(side=BOTTOM, fill=X)
-        tree.heading('Date', text="Date", anchor=W)
+        tree.heading('Datetime', text="Date", anchor=W)
         tree.heading('Open', text="Open", anchor=W)
         tree.heading('High', text="High", anchor=W)
         tree.heading('Low', text="Low", anchor=W)
@@ -513,17 +518,17 @@ class Pricesdownloader(tk.Frame):
         tree.column('#4', stretch=NO, minwidth=0, width=120)
         tree.pack()
 
-        with open(f"C:\\Users\\alexa\\OneDrive\\Desktop\\SN Dimensions\\Data\\insg.csv") as f:
+        with open(f"C:\\Users\\alexa\\OneDrive\\Desktop\\SN Dimensions\\Data\\msft_intra.csv") as f:
             reader = csv.DictReader(f, delimiter=',')
             for row in reader:
-                Date = row['Date']
+                Datetime = row['Datetime']
                 Open = row['Open']
                 High = row['High']
                 Low = row['Low']
                 Close = row['Close']
                 Adj_Close = row['Adj Close']
                 Volume = row['Volume']
-                tree.insert("", 0, values=(Date, Open, High, Low, Close, Volume, Adj_Close, Volume))
+                tree.insert("", 0, values=(Datetime, Open, High, Low, Close, Volume, Adj_Close, Volume))
 
 def ShutProgram(*args):
     app.destroy()                           # Graphical interface
@@ -540,6 +545,9 @@ def goToPrices(*args):
 
 
 if __name__ == "__main__":
+    db.directory_check()
+    db.dl_quote_intraday(intra_ticker)
+    db.dl_index_intraday(index)
     app = Trading_app()
     app.iconbitmap(f'{os.path.dirname(__file__)}\\trade.ico')
     app.geometry("1400x700")
