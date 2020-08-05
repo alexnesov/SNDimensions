@@ -1,5 +1,4 @@
 import os
-os.chdir(f'{os.path.dirname(__file__)}') 
 import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
@@ -32,6 +31,11 @@ import yfinance as yf
 import DB_Access as db
 import OptionsPage as op
 
+try:
+    os.chdir(f'{os.path.dirname(os.path.realpath(__file__))}') 
+except OSError:
+    pass
+    
 # STYLING
 LARGE_FONT= ("Arial", 13)
 NORM_FONT= ("Arial", 10)
@@ -120,7 +124,7 @@ class Trading_app(tk.Toplevel):
 class StartPage(tk.Frame):
     def __init__(self, parent, controller,bg="white"):
         tk.Frame.__init__(self, parent)
-        photo = PhotoImage(file = f'{os.path.dirname(__file__)}\\finance1.gif')
+        photo = PhotoImage(file = f'{os.path.dirname(os.path.realpath(__file__))}\\finance1.gif')
         label = ttk.Label(self, text=("Alpha version of SN Dimensions, use at yor own risk."),
          font=LARGE_FONT)
         label.pack(pady=10,padx=10)
@@ -140,7 +144,7 @@ class StartPage(tk.Frame):
         gif.grid(column=0, row=3)
 
 def save(live_update_list):
-    with open(f'{os.path.dirname(__file__)}\\Data\\{intra_ticker}_intra.csv', 'a+', newline='') as write_obj:
+    with open(f'{os.path.dirname(os.path.realpath(__file__))}\\Data\\{intra_ticker}_intra.csv', 'a+', newline='') as write_obj:
         # Create a writer object from csv module
         csv_writer = writer(write_obj)
         # Add contents of list as last row in the csv file
@@ -325,7 +329,7 @@ class StaticGraphsPage(tk.Frame):
         box1.pack(side="top")                                                       # new container
 
         # Available tables
-        con = sqlite3.connect(f'{os.path.dirname(__file__)}\\Data\\1 Week.db3')
+        con = sqlite3.connect(f'{os.path.dirname(os.path.realpath(__file__))}\\Data\\1 Week.db3')
         mycur = con.cursor() 
         mycur.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;")
         available_table=(mycur.fetchall())
@@ -518,7 +522,7 @@ class Pricesdownloader(tk.Frame):
         tree.column('#4', stretch=NO, minwidth=0, width=120)
         tree.pack()
 
-        with open(f"C:\\Users\\alexa\\OneDrive\\Desktop\\SN Dimensions\\Data\\msft_intra.csv") as f:
+        with open(f'{os.path.dirname(os.path.realpath(__file__))}\\Data\\msft_intra.csv') as f:
             reader = csv.DictReader(f, delimiter=',')
             for row in reader:
                 Datetime = row['Datetime']
@@ -549,7 +553,7 @@ if __name__ == "__main__":
     db.dl_quote_intraday(intra_ticker)
     db.dl_index_intraday(index)
     app = Trading_app()
-    app.iconbitmap(f'{os.path.dirname(__file__)}\\trade.ico')
+    app.iconbitmap(f'{os.path.dirname(os.path.realpath(__file__))}\\trade.ico')
     app.geometry("1400x700")
     ani = animation.FuncAnimation(f_real_time, animate, interval=13000) #milli ==> 1 sec
     update_job = app.after(13000, live_update)
