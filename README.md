@@ -6,3 +6,10 @@ The “Real time data” page refreshes approximately every ten seconds, getting
 All the data downloaded by the user is stored in a sqlite3 database that is connected to the program. There is also a log window where the user can see whether the API recognized the symbol and whether the data was successfully downloaded and stored or not.
 
 There is another page where the user can display the downloaded data in a table.
+
+
+![Alt text](screencaps/sn1.jpg "SN1")
+
+![Alt text](screencaps/sn2.jpg "SN2")
+
+![Alt text](screencaps/sn3.jpg "SN3")
