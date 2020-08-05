@@ -1,6 +1,5 @@
 import os
-os.chdir(r"C:\Users\alexa\OneDrive\Desktop\SN Dimensions")
-
+os.chdir(f'{os.path.dirname(__file__)}\\SN Dimensions')
 import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
@@ -11,17 +10,12 @@ from matplotlib.ticker import (MultipleLocator, FormatStrFormatter, AutoMinorLoc
 from matplotlib import pyplot as plt
 import matplotlib.ticker as mticker
 import matplotlib.ticker as plticker
-
 from PIL import ImageTk,Image 
 import tkinter as tk
 from tkinter import ttk
 from tkinter import*
 from tkinter import PhotoImage
-
-import DB_Access as db
-import OptionsPage as op
 import sqlite3
-
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
@@ -30,28 +24,25 @@ import datetime
 from bs4 import BeautifulSoup
 import requests
 import bs4  
-
 from csv import writer
 import csv
 import time
 import yfinance as yf
 
+import DB_Access as db
+import OptionsPage as op
+
+# STYLING
 LARGE_FONT= ("Arial", 13)
 NORM_FONT= ("Arial", 10)
 SMALL_FONT= ("Arial", 9)
-
-f_real_time = plt.figure(1)
-chartLoad = True
-
-# darkColor = "#183A54"
-# lightColor = "#00A3E0"
-
-
 darkColor = '#406441'
 lightColor = '#03F36F'
 indexColor='#AD21C3'
+photo = PhotoImage(file = f'{os.path.dirname(__file__)}\\finance1.gif')
 
-photo = PhotoImage(file = 'C:\\Users\\alexa\\OneDrive\\Desktop\\SN Dimensions\\finance1.gif')
+f_real_time = plt.figure(1)
+chartLoad = True
 
 stock = "PLUG"
 intra_ticker = "plug"
@@ -147,7 +138,7 @@ class StartPage(tk.Frame):
         gif.grid(column=0, row=3)
 
 def save(live_update_list):
-    with open(f'C:\\Users\\alexa\\OneDrive\\Desktop\\SN Dimensions\\Data\\{intra_ticker}_intra.csv', 'a+', newline='') as write_obj:
+    with open(f'{os.path.dirname(__file__)}\\Data\\{intra_ticker}_intra.csv', 'a+', newline='') as write_obj:
         # Create a writer object from csv module
         csv_writer = writer(write_obj)
         # Add contents of list as last row in the csv file
@@ -329,7 +320,7 @@ class StaticGraphsPage(tk.Frame):
         box1.pack(side="top")                                                       # new container
 
         # Available tables
-        con = sqlite3.connect(f'C:\\Users\\alexa\\OneDrive\\Desktop\\SN Dimensions\\Data\\1 Week.db3')
+        con = sqlite3.connect(f'{os.path.dirname(__file__)}\\Data\\1 Week.db3')
         mycur = con.cursor() 
         mycur.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;")
         available_table=(mycur.fetchall())
@@ -548,10 +539,9 @@ def goToPrices(*args):
     Trading_app.show_frame(app,Pricesdownloader)
 
 
-
 if __name__ == "__main__":
     app = Trading_app()
-    app.iconbitmap(r'C:\Users\alexa\OneDrive\Desktop\SN Dimensions\trade.ico')
+    app.iconbitmap(f'{os.path.dirname(__file__)}\\trade.ico')
     app.geometry("1400x700")
     ani = animation.FuncAnimation(f_real_time, animate, interval=13000) #milli ==> 1 sec
     update_job = app.after(13000, live_update)
