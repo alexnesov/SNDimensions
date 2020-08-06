@@ -9,8 +9,8 @@ There is another page where the user can display the downloaded data in a table.
 
 <h4>To be added</h4>
 
-*Improving geometry for "Prices downloader" page
-*Adding a sqlite3 to csv converter
+* Improving geometry for "Prices downloader" page
+* Adding a sqlite3 to csv converter
 
 ![Alt text](screencaps/sn1.jpg "SN1")
 
