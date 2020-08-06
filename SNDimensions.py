@@ -36,7 +36,6 @@ try:
 except OSError:
     pass
 
-
 # STYLING
 LARGE_FONT= ("Arial", 13)
 NORM_FONT= ("Arial", 10)
