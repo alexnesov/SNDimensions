@@ -342,7 +342,7 @@ class StaticGraphsPage(tk.Frame):
             av_stocks_list.append(test)
         av_stocks_list = list(map(lambda x:x.upper(),av_stocks_list))
         
-        rectangle = tk.Label(box1,width=10)                                                  # just some filling
+        rectangle = tk.Label(box1,width=10)                                            # just some filling
         b1 = tk.Button(box1, text="Back to Home",cursor='hand2',
                     command=lambda: controller.show_frame(StartPage))
 
@@ -385,28 +385,28 @@ class Pricesdownloader(tk.Frame):
                             command=lambda: controller.show_frame(StartPage))
         b1.pack(side="top", padx=5, pady=5)
 
-        #===================================================================== Left
+        #======================================= Left
         
         Left = tk.Frame(self)                                          
-        Left.pack(side="left", expand=True, fill="both")   
-        # Left.configure(background='blue')
+        Left.pack(side="left",fill="both", expand=1)   
 
         boxL1 = tk.Frame(Left, relief="solid",borderwidth=1)
         boxL1b = tk.Frame(Left, relief="solid",borderwidth=1)
         self.boxL2 = tk.Frame(Left, relief="solid",borderwidth=1)
 
-        boxL1.pack(expand=True, fill="both", padx=10, pady=10)
-        boxL1b.pack(expand=True, fill="both", padx=10, pady=10)
-        self.boxL2.pack(expand=True, fill="both", padx=10, pady=10)
+        boxL1.pack(padx=10, pady=10)                                    # Prices Downloader
+        boxL1b.pack(expand=True, padx=10, pady=10)                      # Table display selection
+        self.boxL2.pack(expand=True, fill="both", padx=10, pady=10)     # Prompt
                                         
-                                        # -- Widgets -- L2
+        #                                  -- Widgets -- L2
 
         self.promptTitle = ttk.Label(self.boxL2, text="Prompt", font=LARGE_FONT)
         self.promptTitle.pack()
 
         self.prompt = ttk.Label(self.boxL2)
-        self.prompt.pack()
+        self.prompt.pack(fill="both")
 
+        fff = "ttt"
         #                                  -- Widgets -- L1
         # Labels
         label = ttk.Label(boxL1, text="Prices downloader", font=LARGE_FONT)
@@ -430,7 +430,7 @@ class Pricesdownloader(tk.Frame):
         # TimeFrame choice
         timeFrame = ["1 Week","60 Days", "5 Years" ]
         self.time_period = tk.StringVar(self)
-        self.time_period.set(timeFrame[0])                                              # default value
+        self.time_period.set(timeFrame[0])  # default value
         menu_timeFrame = tk.OptionMenu(boxL1, self.time_period, *timeFrame)
  
         # Select & DL buttons
@@ -441,7 +441,7 @@ class Pricesdownloader(tk.Frame):
         # -- Layout -- L1
         label.grid(row=0,columnspan=4,padx=5, pady=5,stick="we")
         # ROW 1
-        type_stock_symbol.grid(row=1, column=0)
+        type_stock_symbol.grid(row=1, column=0, sticky="EW") ##
         entry.grid(row=1, column=1, stick="we",padx=5, pady=5)
         # ROW 2
         Choose_interval.grid(row=2, column=0)
@@ -449,7 +449,7 @@ class Pricesdownloader(tk.Frame):
         # ROW 3
         b_download.grid(row=3,columnspan=4,padx=5, pady=5,stick="we")
 
-                                                    # -- Widgets -- L1b
+        #                                   -- Widgets -- L1b
 
         label_display = ttk.Label(boxL1b, text="Table display selection", font=LARGE_FONT)
         type_stock_symbol_display = ttk.Label(boxL1b, text="Stock symbol:", font=NORM_FONT)
@@ -461,7 +461,7 @@ class Pricesdownloader(tk.Frame):
         b_display = tk.Button(boxL1b,cursor='hand2', text="Display",bg="blue",fg="white",
          command=lambda:[new_tree()])
 
-        # -- Layout -- L1b
+        #                                    -- Layout -- L1b
         label_display.grid(row=0,columnspan=4,padx=5, pady=5,stick="we")
         # ROW 1
         type_stock_symbol_display.grid(row=1, column=0)
@@ -472,7 +472,7 @@ class Pricesdownloader(tk.Frame):
         # ROW 3
         b_display.grid(row=3,columnspan=4,padx=5, pady=5,stick="we")
 
-        #===================================================================== Right
+        #========================================= Right
         Right = tk.Frame(self)                                                    
         Right.pack(side="right", fill="both") 
 
@@ -492,7 +492,7 @@ class Pricesdownloader(tk.Frame):
             #         Close = row['Close']
             #         tree.insert("", 0, values=(Date, Open, High, Low, Close, Adj_Close, Volume))
 
-        #=========================================== RIGHT SOUTH  CONTAINER
+        #====================================RIGHT SOUTH  CONTAINER
         # INITIAL TREEVIEW
         TableMargin = tk.Frame(boxR1, width=700)
         TableMargin.pack(side="bottom")
