@@ -23,11 +23,11 @@ def directory_check():
     """
     if not os.path.exists(f"{os.path.dirname(__file__)}\\Data"):
         print("Creating the DATA directory in root. . .")
-        os.mkdir(f"{os.path.dirname(__file__)}\\Data")
+        os.mkdir(f'{os.path.dirname(os.path.realpath(__file__))}\\Data')
         for tf, d in zip(timeFrames, durations):
             print(f"Downloading MSFT (default stock - no other stock downloaded yet) data. . .: {tf}")
             df = yf.download(msft, start = d, end = today, period="1d")
-            conn = sqlite3.connect(f'{os.path.dirname(__file__)}\\Data\\{tf}.db3')
+            conn = sqlite3.connect(f'{os.path.dirname(os.path.realpath(__file__))}\\Data\\{tf}.db3')
             df.to_sql(msft,conn)
             conn.close()
 
@@ -57,7 +57,7 @@ def dl_quotes(self, boxL2, entry_stock, period):
         print(f"{entry_stock.upper()} not found!")
 
     # Inserting data (and overwritting it) into the new table
-    conn = sqlite3.connect(f'{os.path.dirname(__file__)}\\Data\\{period}.db3')  
+    conn = sqlite3.connect(f'{os.path.dirname(os.path.realpath(__file__))}\\Data\\{period}.db3')  
     try:
         df.to_sql(f'{entry_stock}',conn, if_exists='replace')
     # " if_exists='replace' " not working for some reasons, so I just added an exception here followed by a manual table replacement
@@ -76,7 +76,7 @@ def dl_quote_intraday(intra_ticker):
     df['Datetime'] = df['Datetime'].dt.tz_localize(None)
     df['Datetime'] = df['Datetime'].astype(str)
     df = df.set_index(['Datetime'])
-    df.to_csv(f'{os.path.dirname(__file__)}\\Data\\{intra_ticker}_intra.csv', index="false")
+    df.to_csv(f'{os.path.dirname(os.path.realpath(__file__))}\\Data\\{intra_ticker}_intra.csv', index="false")
 
 
 def dl_index_intraday(sp500):
@@ -86,7 +86,7 @@ def dl_index_intraday(sp500):
     df_index['Datetime'] = df_index['Datetime'].dt.tz_localize(None)
     df_index['Datetime'] = df_index['Datetime'].astype(str)
     df_index = df_index.set_index(['Datetime'])
-    df_index.to_csv(f'{os.path.dirname(__file__)}\\Data\\{sp500}_intra.csv', index="false")
+    df_index.to_csv(f'{os.path.dirname(os.path.realpath(__file__))}\\Data\\{sp500}_intra.csv', index="false")
 
 def dl_f_statements(entry_stock):
     """
@@ -103,7 +103,7 @@ def dl_f_statements(entry_stock):
 
     try:
         # Inserting data (and overwritting it) into the new table
-        conn = sqlite3.connect(f'{os.path.dirname(__file__)}\\Data\\financials.db3')  
+        conn = sqlite3.connect(f'{os.path.dirname(os.path.realpath(__file__))}\\Data\\financials.db3')  
         financials.to_sql(f'{entry_stock}',conn, if_exists='replace')
         conn.close()
         print(f"Successfuly added {entry_stock} to the sqlite3 database")
@@ -116,7 +116,7 @@ def read_db(entry_stock,period):
     Pulls data from sqlite3 DB
     """
 
-    conn = sqlite3.connect(f'{os.path.dirname(__file__)}\\Data\\{period}.db3')
+    conn = sqlite3.connect(f'{os.path.dirname(os.path.realpath(__file__))}\\Data\\{period}.db3')
     df = pd.read_sql_query(f"SELECT * FROM {entry_stock}", conn)
     conn.close()
 
@@ -126,7 +126,7 @@ def get_available_symbols(period):
     """
     Returns a list of already downloaded symbols
     """
-    con = sqlite3.connect(f'{os.path.dirname(__file__)}\\Data\\{period}.db3')
+    con = sqlite3.connect(f'{os.path.dirname(os.path.realpath(__file__))}\\Data\\{period}.db3')
     mycur = con.cursor() 
     mycur.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;")
     available_table=(mycur.fetchall())

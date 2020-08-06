@@ -35,7 +35,9 @@ try:
     os.chdir(f'{os.path.dirname(os.path.realpath(__file__))}') 
 except OSError:
     pass
-    
+
+ttt= "ttt"
+
 # STYLING
 LARGE_FONT= ("Arial", 13)
 NORM_FONT= ("Arial", 10)
@@ -406,7 +408,6 @@ class Pricesdownloader(tk.Frame):
         self.prompt = ttk.Label(self.boxL2)
         self.prompt.pack(fill="both")
 
-        fff = "ttt"
         #                                  -- Widgets -- L1
         # Labels
         label = ttk.Label(boxL1, text="Prices downloader", font=LARGE_FONT)
