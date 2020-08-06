@@ -36,7 +36,6 @@ try:
 except OSError:
     pass
 
-ttt= "ttt"
 
 # STYLING
 LARGE_FONT= ("Arial", 13)
