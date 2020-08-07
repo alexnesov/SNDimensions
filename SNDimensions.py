@@ -31,10 +31,10 @@ import yfinance as yf
 import DB_Access as db
 import OptionsPage as op
 
-try:
-    os.chdir(f'{os.path.dirname(os.path.realpath(__file__))}') 
-except OSError:
-    pass
+# try:
+#     os.chdir(f'{os.path.dirname(os.path.realpath(__file__))}') 
+# except OSError:
+#     pass
 
 # STYLING
 LARGE_FONT= ("Arial", 13)
@@ -66,7 +66,6 @@ def changeChartLoad(toWhat):
 
 class Trading_app(tk.Toplevel):
     def __init__(self, *args, **kwargs):  #args = variables, kwargs=dictionnaries
-        
         tk.Toplevel.__init__(self, *args, **kwargs)
         tk.Toplevel.wm_title(self, "SN Dimensions")
 
@@ -108,13 +107,11 @@ class Trading_app(tk.Toplevel):
         tk.Tk.config(self, menu=menubar) 
 
         self.frames = {}
-
         for F in (StartPage, Real_Time_data, StaticGraphsPage, Pricesdownloader, op.OptionsPage):                       ######### PAGES
 
             frame = F(container, self)
             self.frames[F] = frame
             frame.grid(row=0, column = 0, sticky="nsew")
-
         self.show_frame(StartPage)
 
     def show_frame(self, cont):
@@ -162,7 +159,7 @@ def live_update(*args):
     save(live_update_list)
     update_job = app.after(15000, live_update)
     pass
-    # return live_update_list
+
 
 def animate(i):
     if chartLoad:
@@ -172,26 +169,24 @@ def animate(i):
         v = plt.subplot2grid((6,2), (2,0), rowspan = 2, colspan = 4,sharex=a)
         index_plot = plt.subplot2grid((6,2), (4,0), rowspan = 2, colspan = 4,sharex=a)
         # SP 1
-        df = pd.read_csv(f'C:\\Users\\alexa\\OneDrive\\Desktop\\SN Dimensions\\Data\\{intra_ticker}_intra.csv')
+        df = pd.read_csv(f'{os.path.dirname(os.path.realpath(__file__))}\\Data\\{intra_ticker}_intra.csv')
         df['Datetime'] = df['Datetime'].astype('datetime64[ns]')
         # SP 2
         dateStamps = df['Datetime']
         volume = df["Volume"]
         # SP 3
-        df_index = pd.read_csv(f'C:\\Users\\alexa\\OneDrive\\Desktop\\SN Dimensions\\Data\\{index}_intra.csv')
+        df_index = pd.read_csv(f'{os.path.dirname(os.path.realpath(__file__))}\\Data\\{index}_intra.csv')
         df_index['Datetime'] = df['Datetime'].astype('datetime64[ns]')
 
         a.clear()
         v.clear()
         index_plot.clear()
-
         a.plot("Datetime", "Open", data=df, color= lightColor, 
                                 label="Open", linewidth=1, alpha=0.8)
         a.plot("Datetime", "Close", data=df, color= darkColor, 
                                 label="Close", linewidth=1, linestyle="dashed", alpha=0.8)
         index_plot.plot("Datetime", "Open", data=df_index, color=indexColor, 
                                 label="Open", linewidth=1, alpha=0.8)
-
         a.xaxis.set_minor_locator(AutoMinorLocator()) 
         a.format_xdata = mdates.DateFormatter('%H-%M-%S')
         v.fill_between(dateStamps , 0, volume, color=lightColor, alpha=0.6, edgecolor=lightColor)
@@ -207,23 +202,19 @@ def animate(i):
         a.grid(color='grey', linestyle='-', linewidth=0.25, alpha=0.6)
         v.grid(color='grey', linestyle='-', linewidth=0.25, alpha=0.6)
         index_plot.grid(color='grey', linestyle='-', linewidth=0.25, alpha=0.6)
-
         plt.setp(a.get_xticklabels(), visible = False)
         plt.setp(v.get_xticklabels(), visible = False)
-
-        # f_real_time.autofmt_xdate()
         a.legend(bbox_to_anchor=(0, 1.02, 1, .102), loc=3, ncol=2, borderaxespad=0)
     else:
         pass
 
 class Real_Time_data(tk.Frame):
     def __init__(self, parent, controller):
-
         tk.Frame.__init__(self, parent,bg="white")
+
         label = ttk.Label(self, text="Real time data", font=LARGE_FONT)
         label.pack(pady=10,padx=10)
-
-        box1 = tk.Frame(self, bg="white")                                                       # new container
+        box1 = tk.Frame(self, bg="white")                                                     
         box1.pack(side="top")  
 
         def icon_change_resume_pause():
@@ -264,7 +255,6 @@ class Real_Time_data(tk.Frame):
 
 class StaticGraphsPage(tk.Frame):
     def __init__(self, parent, controller):
-        
         tk.Frame.__init__(self, parent)
 
         f_static = plt.figure(2)
@@ -313,20 +303,17 @@ class StaticGraphsPage(tk.Frame):
             self.ax3.grid(color='grey', linestyle='-', linewidth=0.25, alpha=0.6)
             self.ax4.grid(color='grey', linestyle='-', linewidth=0.25, alpha=0.6)
             self.ax4.fill_between(dateStamps , 0, volume, color=lightColor, alpha=0.6, edgecolor=lightColor)
-
             self.ax3.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))  
             self.ax3.get_xaxis().get_offset_text().set_position((2,0))
-            
             f_static.autofmt_xdate()
             title=f"Prices for {static_p_entry_stock}. Period: {static_p_period}."
             self.ax3.set_title(title)
             self.canvas.draw()
 
-
         label = ttk.Label(self, text="Graph Page", font=LARGE_FONT)
         label.pack(pady=10,padx=10)
-        box1 = tk.Frame(self)                                                       # new container
-        box1.pack(side="top")                                                       # new container
+        box1 = tk.Frame(self)                                                       
+        box1.pack(side="top")                                                       
 
         # Available tables
         con = sqlite3.connect(f'{os.path.dirname(os.path.realpath(__file__))}\\Data\\1 Week.db3')
@@ -342,7 +329,7 @@ class StaticGraphsPage(tk.Frame):
             av_stocks_list.append(test)
         av_stocks_list = list(map(lambda x:x.upper(),av_stocks_list))
         
-        rectangle = tk.Label(box1,width=10)                                            # just some filling
+        rectangle = tk.Label(box1,width=10) # just some filling
         b1 = tk.Button(box1, text="Back to Home",cursor='hand2',
                     command=lambda: controller.show_frame(StartPage))
 
@@ -361,7 +348,7 @@ class StaticGraphsPage(tk.Frame):
         
         #                                           ***LAYOUT***
         b1.pack(side="left", padx=5, pady=5,fill=tk.Y)
-        rectangle.pack(side="left",padx=5, pady=5,fill=tk.Y)                         # just some filling    
+        rectangle.pack(side="left",padx=5, pady=5,fill=tk.Y)  # just some filling    
         rectangle2.pack(side="left",padx=5, pady=5,fill=tk.Y)             
         b2.pack(side="left",padx=5, pady=5,fill=tk.Y)
         menu_timeFrame.pack(side="left", padx=5, pady=5,fill=tk.Y)
@@ -389,11 +376,9 @@ class Pricesdownloader(tk.Frame):
         
         Left = tk.Frame(self)                                          
         Left.pack(side="left",fill="both", expand=1)   
-
         boxL1 = tk.Frame(Left, relief="solid",borderwidth=1)
         boxL1b = tk.Frame(Left, relief="solid",borderwidth=1)
         self.boxL2 = tk.Frame(Left, relief="solid",borderwidth=1)
-
         boxL1.pack(padx=10, pady=10)                                    # Prices Downloader
         boxL1b.pack(expand=True, padx=10, pady=10)                      # Table display selection
         self.boxL2.pack(expand=True, fill="both", padx=10, pady=10)     # Prompt
@@ -402,7 +387,6 @@ class Pricesdownloader(tk.Frame):
 
         self.promptTitle = ttk.Label(self.boxL2, text="Prompt", font=LARGE_FONT)
         self.promptTitle.pack()
-
         self.prompt = ttk.Label(self.boxL2)
         self.prompt.pack(fill="both")
 
@@ -481,7 +465,7 @@ class Pricesdownloader(tk.Frame):
 
         def new_tree():
             tree.delete(*tree.get_children())   # " * " stands for 
-            # with open(f"C:\\Users\\alexa\\OneDrive\\Desktop\\SN Dimensions\\Data\\insg.csv") as f:
+            # with open(f'{os.path.dirname(os.path.realpath(__file__))}\\Data\\insg.csv') as f:
             #     reader = csv.DictReader(f, delimiter=',')
             #     for row in reader:
             #         Date = row['Date']
